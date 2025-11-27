@@ -1,6 +1,6 @@
 package com.bradesco.seguranca.apiconfirmacao.service;
 
-import com.bradesco.seguranca.apiconfirmacao.dto.TransacaoRequestDTO; // Para o método de criação
+import com.bradesco.seguranca.apiconfirmacao.dto.TransacaoRequestDTO;
 import com.bradesco.seguranca.apiconfirmacao.model.StatusTransacao;
 import com.bradesco.seguranca.apiconfirmacao.model.TransacaoPendente;
 import com.bradesco.seguranca.apiconfirmacao.repository.TransacaoRepository;
@@ -14,9 +14,6 @@ public class ConfirmacaoService {
 
     @Autowired
     private TransacaoRepository transacaoRepository;
-
-    // O método de confirmação (confirmar) iria aqui se estivesse na camada Service
-    // public void confirmar(Long id) { ... }
 
     // 1. MÉTODO DE CRIAÇÃO (Persistência)
     public TransacaoPendente criarTransacao(TransacaoRequestDTO request) {
@@ -35,7 +32,20 @@ public class ConfirmacaoService {
         return transacaoRepository.save(novaTransacao);
     }
 
-    // 2. MÉTODO DE NEGAÇÃO (Atualização)
+    // 2. MÉTODO DE CONFIRMAÇÃO (IMPLEMENTADO PARA O TESTE)
+    public void confirmarTransacao(Long id) {
+        // Busca a transação, ou lança erro se não for encontrada
+        TransacaoPendente transacao = transacaoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transação de ID " + id + " não encontrada."));
+
+        // **Ação do Teste:** Altera o status para CONFIRMADA_CLIENTE
+        transacao.setStatus(StatusTransacao.CONFIRMADA_CLIENTE);
+
+        // Salva a alteração no banco de dados
+        transacaoRepository.save(transacao);
+    }
+
+    // 3. MÉTODO DE NEGAÇÃO (Atualização)
     public void negar(Long id) {
         // Busca a transação, ou lança erro se não for encontrada
         TransacaoPendente transacao = transacaoRepository.findById(id)

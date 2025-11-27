@@ -1,12 +1,14 @@
 package com.bradesco.seguranca.apiconfirmacao.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "transacoes_pendentes")
 public class TransacaoPendente {
 
